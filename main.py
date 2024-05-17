@@ -93,36 +93,36 @@ class BinaryBattlePracticeTool(tk.Tk):
         button_frame = tk.Frame(self.main_frame, bg="black")
         button_frame.pack(pady=20)
 
-        def show_result_up():
-            self.get_result(random_number, "up")
+        def show_result_one():
+            self.get_result(random_number, "one")
 
-        def show_result_down():
-            self.get_result(random_number, "down")
+        def show_result_zero():
+            self.get_result(random_number, "zero")
 
         def show_result_pass():
             self.get_result(random_number, "pass")
 
-        up_button = tk.Button(button_frame, text="上げる", font=("Helvetica", 36, "bold"), fg="lime", bg="black", command=show_result_up)
-        up_button.pack(side="left", padx=20)
+        one_button = tk.Button(button_frame, text='  １  ', font=("Helvetica", 36, "bold"), fg="lime", bg="black", command=show_result_one)
+        one_button.pack(side="left", padx=20)
 
-        down_button = tk.Button(button_frame, text="下げる", font=("Helvetica", 36, "bold"), fg="red", bg="black", command=show_result_down)
-        down_button.pack(side="left", padx=20)
+        zero_button = tk.Button(button_frame, text='  ０  ', font=("Helvetica", 36, "bold"), fg="red", bg="black", command=show_result_zero)
+        zero_button.pack(side="left", padx=20)
 
         pass_button = tk.Button(self.main_frame, text="パス", font=("Helvetica", 24, "bold"), fg="white", bg="black", command=show_result_pass)
         pass_button.pack(pady=20)
 
         self.update_timer()
 
-    def get_result(self, random_number,  player_action):
+    def get_result(self, random_number,  player_select):
         raw_answer = str(bin(random_number))[2:].zfill(8)
         answer = raw_answer[:4] + " " + raw_answer[4:]
 
-        if (raw_answer[-self.options_value["idx"]] == "1" and player_action == "up") or (raw_answer[-self.options_value["idx"]] == "0" and player_action == "down"):
+        if (raw_answer[-self.options_value["idx"]] == "1" and player_select == "one") or (raw_answer[-self.options_value["idx"]] == "0" and player_select == "zero"):
             result = "correct"
         else:
             result = "incorrect"
         
-        self.add_result(self.options_value["idx"], random_number, player_action, time.time() - self.start_time)
+        self.add_result(self.options_value["idx"], random_number, player_select, time.time() - self.start_time)
         if self.question_number % 10 == 0:
             self.save_result()
         self.create_result_screen(random_number, answer, result)
@@ -191,7 +191,7 @@ class BinaryBattlePracticeTool(tk.Tk):
             widget.destroy()
 
     def add_result(self, idx, num, ans, time):
-        self.results.append(f"idx:{idx}, num:{num}, ans:{ans}, time{time}")
+        self.results.append(f"idx:{idx}, num:{num}, ans:{ans}, time:{time}")
 
     def save_result(self):
         with open(self.RESULTS_FILE, "a") as file:
