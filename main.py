@@ -53,7 +53,7 @@ class BinaryBattlePracticeTool(tk.Tk):
         title_label = tk.Label(self.main_frame, text="Binary Battle Practice Tool", font=("Helvetica", 50, "bold"), fg="white", bg="black")
         title_label.pack(pady=60)
 
-        idx_label = tk.Label(self.main_frame, text="あなたの番号 :", font=("Helvetica", 24), fg="white", bg="black")
+        idx_label = tk.Label(self.main_frame, text="あなたは何番目？", font=("Helvetica", 24), fg="white", bg="black")
         idx_label.pack(pady=(20, 5))
 
         self.menu_selected_idx = tk.StringVar()
