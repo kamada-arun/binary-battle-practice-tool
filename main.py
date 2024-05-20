@@ -53,7 +53,7 @@ class BinaryBattlePracticeTool(tk.Tk):
         title_label = tk.Label(self.main_frame, text="Binary Battle Practice Tool", font=("Helvetica", 50, "bold"), fg="white", bg="black")
         title_label.pack(pady=60)
 
-        idx_label = tk.Label(self.main_frame, text="あなたの番号 :", font=("Helvetica", 24), fg="white", bg="black")
+        idx_label = tk.Label(self.main_frame, text="あなたは何番目？", font=("Helvetica", 24), fg="white", bg="black")
         idx_label.pack(pady=(20, 5))
 
         self.menu_selected_idx = tk.StringVar()
@@ -102,10 +102,10 @@ class BinaryBattlePracticeTool(tk.Tk):
         def show_result_pass():
             self.get_result(random_number, "pass")
 
-        one_button = tk.Button(button_frame, text='  １  ', font=("Helvetica", 36, "bold"), fg="lime", bg="black", command=show_result_one)
+        one_button = tk.Button(button_frame, text="  1  ", font=("Helvetica", 36, "bold"), fg="lime", bg="black", command=show_result_one)
         one_button.pack(side="left", padx=20)
 
-        zero_button = tk.Button(button_frame, text='  ０  ', font=("Helvetica", 36, "bold"), fg="red", bg="black", command=show_result_zero)
+        zero_button = tk.Button(button_frame, text="  0  ", font=("Helvetica", 36, "bold"), fg="red", bg="black", command=show_result_zero)
         zero_button.pack(side="left", padx=20)
 
         pass_button = tk.Button(self.main_frame, text="パス", font=("Helvetica", 24, "bold"), fg="white", bg="black", command=show_result_pass)
@@ -113,16 +113,19 @@ class BinaryBattlePracticeTool(tk.Tk):
 
         self.update_timer()
 
-    def get_result(self, random_number,  player_select):
-        raw_answer = str(bin(random_number))[2:].zfill(8)
+    def get_result(self, random_number,  player_action):
+        if random_number < 0:
+            raw_answer = self.to_twos_complement(random_number, 8)
+        else:
+            raw_answer = str(bin(random_number))[2:].zfill(8)
         answer = raw_answer[:4] + " " + raw_answer[4:]
 
-        if (raw_answer[-self.options_value["idx"]] == "1" and player_select == "one") or (raw_answer[-self.options_value["idx"]] == "0" and player_select == "zero"):
+        if (raw_answer[-self.options_value["idx"]] == "1" and player_action == "one") or (raw_answer[-self.options_value["idx"]] == "0" and player_action == "zero"):
             result = "correct"
         else:
             result = "incorrect"
         
-        self.add_result(self.options_value["idx"], random_number, player_select, time.time() - self.start_time)
+        self.add_result(self.options_value["idx"], random_number, player_action, time.time() - self.start_time)
         if self.question_number % 10 == 0:
             self.save_result()
         self.create_result_screen(random_number, answer, result)
@@ -191,12 +194,27 @@ class BinaryBattlePracticeTool(tk.Tk):
             widget.destroy()
 
     def add_result(self, idx, num, ans, time):
-        self.results.append(f"idx:{idx}, num:{num}, ans:{ans}, time:{time}")
+        self.results.append(f"idx:{idx}, num:{num}, ans:{ans}, time{time}")
 
     def save_result(self):
         with open(self.RESULTS_FILE, "a") as file:
             [file.write(f"{res}\n") for res in self.results]
         self.results = []
+
+    def to_twos_complement(self, value, bit_width):
+        # まず、範囲チェックを行います
+        if value >= 0:
+            raise ValueError("The value must be negative.")
+        if value < -(1 << (bit_width - 1)):
+            raise ValueError(f"The value {value} is too small for the given bit width {bit_width}.")
+        
+        # 負の数を二の補数に変換する
+        twos_complement_value = (1 << bit_width) + value
+
+        # 二進数に変換し、ビット幅に合わせて0埋めを行う
+        binary_representation = format(twos_complement_value, f'0{bit_width}b')
+
+        return binary_representation
 
 if __name__ == "__main__":
     app = BinaryBattlePracticeTool()
