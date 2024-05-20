@@ -4,11 +4,14 @@ import os
 import random as rand
 import time
 from PIL import Image, ImageTk
+import sys
 
 class BinaryBattlePracticeTool(tk.Tk):
     def __init__(self):
         self.OPTIONS_FILE = "options"
         self.RESULTS_FILE = "results"
+        self.MARU_IMAGE = os.path.join(sys._MEIPASS, "data/maru.png")
+        self.BATU_IMAGE = os.path.join(sys._MEIPASS, "data/batu.png")
         self.results = []
         self.read_options()
 
@@ -151,9 +154,9 @@ class BinaryBattlePracticeTool(tk.Tk):
 
         # マルバツ画像のラベル
         if result == "correct":
-            answer_image = Image.open("data/maru.png")
+            answer_image = Image.open(self.MARU_IMAGE)
         else:
-            answer_image = Image.open("data/batu.png")
+            answer_image = Image.open(self.BATU_IMAGE)
         
         answer_image = answer_image.resize((180, 180), Image.ANTIALIAS)
         self.answer_image_tk = ImageTk.PhotoImage(answer_image)
