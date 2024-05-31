@@ -1,5 +1,5 @@
 # ver 1.1
-- [DOWNLOAD bbpt v1.1](https://drive.google.com/file/d/1WH9nOencP5Uf8OwlLG2T4SqD9kzn3dJn/view?usp=sharing)
+- [DOWNLOAD bbpt v1.1](https://drive.google.com/file/d/1sNnpH8QcWSDqeXwd4_QDrnWQGumO8Smf/view?usp=drive_link)
 ## 変更点
 - 負の数の対応
 - 「上げる」「下げる」を、「１」「０」に変更
